@@ -33,7 +33,7 @@ class HeaderMoviesViewPagerAdapter :
     override fun getItemCount(): Int = moviesList.size
 
     fun onUpdateData(items: List<Movie>) {
-        Log.d(TAG, "updateData")
+        Log.d(TAG, "METHOD CALLED: updateData(List<Movie>)")
         moviesList.clear()
         moviesList.addAll(items)
         notifyDataSetChanged()

@@ -23,6 +23,7 @@ class MainViewModel @Inject constructor(
 
     private val _topRatedMovies: ArrayList<Movie> = arrayListOf()
     private val _morePopular : ArrayList<Movie> = arrayListOf()
+    private var isInfoGot: Boolean = false
 
     private val _generalMoviesLists: ArrayList<MoviesList> = arrayListOf()
     val generalMoviesLists = MutableLiveData<List<MoviesList>?>()
@@ -31,37 +32,42 @@ class MainViewModel @Inject constructor(
         getMoviesLists()
     }
 
-    fun getMoviesLists(){
+    private fun getMoviesLists(){
         viewModelScope.launch {
             Log.i(TAG, "METHOD CALLED: getMoviesLists()")
-            for (i in 1..5){
-                val result: MoviesList = getMoviesListUseCase(i.toLong())
-                // if result.id isn't null, there is data
-                if(result.id != null) {
-                    _generalMoviesLists.add(result)
-                    val movies: MutableList<Movie> = result.results as MutableList<Movie>
+            if(!isInfoGot) {
+                for (i in 1..5){
+                    val result: MoviesList = getMoviesListUseCase(i.toLong())
+                    // if result.id isn't null, there is data
+                    if(result.id != null) {
+                        _generalMoviesLists.add(result)
+                        val movies: MutableList<Movie> = result.results as MutableList<Movie>
 
-                    // getting top Rated from current MoviesList
-                    val topRated = movies.sortedByDescending { it.vote_average }.subList(0, 2)
-                    _topRatedMovies.addAll(topRated)
+                        // getting top Rated from current MoviesList
+                        val topRated = movies.sortedByDescending { it.vote_average }.subList(0, 2)
+                        _topRatedMovies.addAll(topRated)
 
-                    // getting more popular from current MoviesList
-                    val morePopular = movies.sortedByDescending { it.popularity }.subList(0, 2)
-                    _morePopular.addAll(morePopular)
+                        // getting more popular from current MoviesList
+                        val morePopular = movies.sortedByDescending { it.popularity }.subList(0, 2)
+                        _morePopular.addAll(morePopular)
+                    }
                 }
+
+                // adding topRated and MorePopular lists in generalMoviesLists
+                _generalMoviesLists.add(0, MoviesList(name = "More Popular", results = _morePopular.sortedByDescending { it.popularity }))
+                _generalMoviesLists.add(1, MoviesList(name = "Top Rated", results = _topRatedMovies.sortedByDescending { it.vote_average }))
+
+                // changing LiveData values
+                generalMoviesLists.value = _generalMoviesLists
+
+                // changing _isInfoGot state
+                isInfoGot = !isInfoGot
             }
-
-            // adding topRated and MorePopular lists in generalMoviesLists
-            _generalMoviesLists.add(0, MoviesList(name = "More Popular", results = _morePopular.sortedByDescending { it.popularity }))
-            _generalMoviesLists.add(1, MoviesList(name = "Top Rated", results = _topRatedMovies.sortedByDescending { it.vote_average }))
-
-            // changing LiveData values
-            generalMoviesLists.value = _generalMoviesLists
         }
     }
 
-
-
-
-
+    override fun onCleared() {
+        super.onCleared()
+        Log.i(TAG, "METHOD CALLED: onCleared()")
+    }
 }
