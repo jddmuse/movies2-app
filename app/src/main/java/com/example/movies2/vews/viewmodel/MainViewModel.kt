@@ -38,8 +38,6 @@ class MainViewModel @Inject constructor(
     private fun getMoviesLists(){
         viewModelScope.launch {
             try {
-
-            } catch (ex:Exception) {
                 Log.i(TAG, "METHOD CALLED: getMoviesLists()")
                 if(!isInfoGot) {
                     // invoke use case
@@ -52,6 +50,8 @@ class MainViewModel @Inject constructor(
                     // changing _isInfoGot state
                     isInfoGot = !isInfoGot
                 }
+            } catch (ex:Exception) {
+                Log.e(TAG, "Exception $ex")
             }
         }
     }
