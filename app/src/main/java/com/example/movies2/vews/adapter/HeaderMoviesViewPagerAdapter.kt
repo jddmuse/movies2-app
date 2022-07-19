@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.movies2.R
 import com.example.movies2.data.model.baseUrlImg
-import com.example.movies2.databinding.ItemHeaderFragmentMoviesBinding
+import com.example.movies2.databinding.ItemHeaderMoviesBinding
 import com.example.movies2.domain.model.Movie
 
 private const val TAG = "::HeaderMoviesViewPagerAdapter -> "
@@ -21,7 +21,7 @@ class HeaderMoviesViewPagerAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_header_fragment_movies, parent, false
+                R.layout.item_header_movies, parent, false
             )
         )
 
@@ -40,7 +40,7 @@ class HeaderMoviesViewPagerAdapter :
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding = ItemHeaderFragmentMoviesBinding.bind(view)
+        val binding = ItemHeaderMoviesBinding.bind(view)
 
         fun bind(item: Movie) {
             Glide.with(itemView).load("$baseUrlImg${item.backdrop_path}")

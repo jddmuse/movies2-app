@@ -53,7 +53,7 @@ class MainViewModel @Inject constructor(
 
             // adding topRated and MorePopular lists in generalMoviesLists
             _generalMoviesLists.add(0, MoviesList(name = "More Popular", results = _morePopular.sortedByDescending { it.popularity }))
-            _generalMoviesLists.add(1, MoviesList(name = "top Rated", results = _topRatedMovies.sortedByDescending { it.vote_average }))
+            _generalMoviesLists.add(1, MoviesList(name = "Top Rated", results = _topRatedMovies.sortedByDescending { it.vote_average }))
 
             // changing LiveData values
             generalMoviesLists.value = _generalMoviesLists

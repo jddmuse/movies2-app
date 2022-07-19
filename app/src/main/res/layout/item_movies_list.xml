@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dp_16"
-        android:layout_marginTop="@dimen/dp_28"
+        android:layout_marginTop="@dimen/dp_20"
         android:text="@string/genre_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintTop_toTopOf="parent" />
