@@ -13,7 +13,7 @@ class MovieService @Inject constructor(
         private const val TAG = "MovieService"
     }
 
-    suspend fun getMoviesList(id: Long): MoviesListModel =
+    suspend fun getMoviesList(id: Int): MoviesListModel =
         try {
             Log.i(TAG, "METHOD CALLED: getMoviesList(Long)")
             val result: Response<MoviesListModel?> = movieApiClient.getMoviesList(id)

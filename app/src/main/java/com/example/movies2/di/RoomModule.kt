@@ -30,4 +30,8 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideMoviesListDAO(database: TheMovieDatabase): MoviesListDAO = database.getMoviesListDAO()
+
+    @Singleton
+    @Provides
+    fun provideContext(@ApplicationContext context: Context) = context
 }

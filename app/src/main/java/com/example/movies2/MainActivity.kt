@@ -1,10 +1,13 @@
 package com.example.movies2
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,6 +62,11 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
             Log.i(TAG, "CHANGE OBSERVED viewModel.generalMoviesLists")
             generalMoviesListAdapter.onUpdateData(it!!)
             headerAdapter.onUpdateData(it.random().results)
+        })
+
+        viewModel.isLoading.observe(this, Observer {
+            Log.i(TAG, "CHANGE OBSERVED viewModel.isLoading")
+            binding.progressBar.visibility = View.GONE
         })
     }
 

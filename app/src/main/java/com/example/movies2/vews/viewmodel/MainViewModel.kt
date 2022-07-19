@@ -1,6 +1,9 @@
 package com.example.movies2.vews.viewmodel
 
+import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,18 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getMoviesListUseCase: GetMoviesListUseCase
+    private val getMoviesListUseCase: GetMoviesListUseCase,
 ):ViewModel() {
 
     companion object {
         private const val TAG = "MainViewModel"
     }
 
-    private val _topRatedMovies: ArrayList<Movie> = arrayListOf()
-    private val _morePopular : ArrayList<Movie> = arrayListOf()
-    private var isInfoGot: Boolean = false
+    private val _isLoading = true
+    val isLoading = MutableLiveData<Boolean>()
 
-    private val _generalMoviesLists: ArrayList<MoviesList> = arrayListOf()
+    private var isInfoGot: Boolean = false
     val generalMoviesLists = MutableLiveData<List<MoviesList>?>()
 
     fun onCreate(){
@@ -36,29 +38,13 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             Log.i(TAG, "METHOD CALLED: getMoviesLists()")
             if(!isInfoGot) {
-                for (i in 1..5){
-                    val result: MoviesList = getMoviesListUseCase(i.toLong())
-                    // if result.id isn't null, there is data
-                    if(result.id != null) {
-                        _generalMoviesLists.add(result)
-                        val movies: MutableList<Movie> = result.results as MutableList<Movie>
 
-                        // getting top Rated from current MoviesList
-                        val topRated = movies.sortedByDescending { it.vote_average }.subList(0, 2)
-                        _topRatedMovies.addAll(topRated)
-
-                        // getting more popular from current MoviesList
-                        val morePopular = movies.sortedByDescending { it.popularity }.subList(0, 2)
-                        _morePopular.addAll(morePopular)
-                    }
-                }
-
-                // adding topRated and MorePopular lists in generalMoviesLists
-                _generalMoviesLists.add(0, MoviesList(name = "More Popular", results = _morePopular.sortedByDescending { it.popularity }))
-                _generalMoviesLists.add(1, MoviesList(name = "Top Rated", results = _topRatedMovies.sortedByDescending { it.vote_average }))
+                // invoke use case
+                val result: ArrayList<MoviesList> = getMoviesListUseCase()
 
                 // changing LiveData values
-                generalMoviesLists.value = _generalMoviesLists
+                generalMoviesLists.value = result
+                isLoading.value = !_isLoading
 
                 // changing _isInfoGot state
                 isInfoGot = !isInfoGot
