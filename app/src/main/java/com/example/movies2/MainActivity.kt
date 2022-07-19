@@ -22,6 +22,7 @@ import com.example.movies2.vews.adapter.HeaderMoviesViewPagerAdapter
 import com.example.movies2.vews.adapter.MoviesListsAdapter
 import com.example.movies2.vews.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, UIBehavior.ViewPager,
@@ -51,10 +52,14 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
     }
 
     override fun initUI() {
-        initRecyclerView()
-        initViewPager2()
-        initLiveDataObservables()
-        viewModel.onCreate()
+        try {
+            initRecyclerView()
+            initViewPager2()
+            initLiveDataObservables()
+            viewModel.onCreate()
+        } catch (ex:Exception){
+            Log.e(TAG, "Exception: $ex")
+        }
     }
 
     private fun initLiveDataObservables() {

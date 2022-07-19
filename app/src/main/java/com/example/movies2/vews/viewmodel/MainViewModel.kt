@@ -13,6 +13,7 @@ import com.example.movies2.domain.model.Movie
 import com.example.movies2.domain.model.MoviesList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,18 +37,21 @@ class MainViewModel @Inject constructor(
 
     private fun getMoviesLists(){
         viewModelScope.launch {
-            Log.i(TAG, "METHOD CALLED: getMoviesLists()")
-            if(!isInfoGot) {
+            try {
 
-                // invoke use case
-                val result: ArrayList<MoviesList> = getMoviesListUseCase()
+            } catch (ex:Exception) {
+                Log.i(TAG, "METHOD CALLED: getMoviesLists()")
+                if(!isInfoGot) {
+                    // invoke use case
+                    val result: ArrayList<MoviesList> = getMoviesListUseCase()
 
-                // changing LiveData values
-                generalMoviesLists.value = result
-                isLoading.value = !_isLoading
+                    // changing LiveData values
+                    generalMoviesLists.value = result
+                    isLoading.value = !_isLoading
 
-                // changing _isInfoGot state
-                isInfoGot = !isInfoGot
+                    // changing _isInfoGot state
+                    isInfoGot = !isInfoGot
+                }
             }
         }
     }
