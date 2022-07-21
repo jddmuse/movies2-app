@@ -3,14 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/activity_movie_details.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/content_main.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/item_genre_list.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/item_header_fragment_movies.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/item_movie.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/item_movie_search.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/item_movies_list.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/layout/item_search_movie.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/movies2/app/src/main/res/menu/nav_menu.xml" value="0.25" />
       </map>
     </option>

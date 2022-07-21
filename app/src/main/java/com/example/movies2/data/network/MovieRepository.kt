@@ -47,6 +47,11 @@ class MovieRepository @Inject constructor(
         return items.map { it.toDomain() } ?: emptyList()
     }
 
+    suspend fun getMoviesByName(q:String): List<Movie> {
+        val items = movieDAO.getMoviesByName(q)
+        return items.map { it.toDomain() } ?: emptyList()
+    }
+
     suspend fun clearAllMovies(){
         movieDAO.deleteAllMovies()
     }

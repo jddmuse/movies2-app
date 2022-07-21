@@ -1,14 +1,13 @@
 package com.example.movies2
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,13 +19,13 @@ import com.example.movies2.util.UIBehavior
 import com.example.movies2.vews.activity.MovieDetailsActivity
 import com.example.movies2.vews.adapter.HeaderMoviesViewPagerAdapter
 import com.example.movies2.vews.adapter.MoviesListsAdapter
+import com.example.movies2.vews.adapter.MoviesSearchAdapter
 import com.example.movies2.vews.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, UIBehavior.ViewPager,
-    ItemActionListener {
+    ItemActionListener, SearchView.OnQueryTextListener {
 
     companion object {
         private const val TAG = "MainActivity"
@@ -40,6 +39,7 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
 
     // adapter
     private val generalMoviesListAdapter = MoviesListsAdapter(this)
+    private val moviesSearchAdapter = MoviesSearchAdapter(this)
     private val headerAdapter = HeaderMoviesViewPagerAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +57,14 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
             initViewPager2()
             initLiveDataObservables()
             viewModel.onCreate()
-        } catch (ex:Exception){
+            binding.searchBar.setOnQueryTextListener(this)
+        } catch (ex: Exception) {
             Log.e(TAG, "Exception: $ex")
         }
     }
 
     private fun initLiveDataObservables() {
+
         viewModel.generalMoviesLists.observe(this, Observer {
             Log.i(TAG, "CHANGE OBSERVED viewModel.generalMoviesLists")
             generalMoviesListAdapter.onUpdateData(it!!)
@@ -73,6 +75,11 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
             Log.i(TAG, "CHANGE OBSERVED viewModel.isLoading")
             binding.progressBar.visibility = View.GONE
         })
+
+        viewModel.searchMoviesList.observe(this, Observer {
+            Log.i(TAG, "CHANGE OBSERVED viewModel.searchMoviesList")
+            moviesSearchAdapter.onUpdateData(it)
+        })
     }
 
     override fun initRecyclerView() {
@@ -80,6 +87,10 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
             rvGeners.layoutManager =
                 LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
             rvGeners.adapter = generalMoviesListAdapter
+
+            rvMoviesSearch.layoutManager =
+                LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+            rvMoviesSearch.adapter = moviesSearchAdapter
         }
     }
 
@@ -113,5 +124,18 @@ class MainActivity : AppCompatActivity(), UIBehavior, UIBehavior.RecyclerView, U
         }
         startActivity(intent)
     }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean =
+        try {
+            viewModel.getMoviesByName(p0)
+            true
+        } catch (ex:Exception) {
+            Log.e(TAG, "Exception: $ex")
+            false
+        }
 
 }

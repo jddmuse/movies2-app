@@ -1,24 +1,21 @@
 package com.example.movies2.vews.viewmodel
 
-import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movies2.domain.GetMoviesByNameUseCase
 import com.example.movies2.domain.GetMoviesListUseCase
 import com.example.movies2.domain.model.Movie
 import com.example.movies2.domain.model.MoviesList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getMoviesListUseCase: GetMoviesListUseCase,
+    private val getMoviesByNameUseCase: GetMoviesByNameUseCase
 ):ViewModel() {
 
     companion object {
@@ -30,6 +27,9 @@ class MainViewModel @Inject constructor(
 
     private var isInfoGot: Boolean = false
     val generalMoviesLists = MutableLiveData<List<MoviesList>?>()
+
+    // search list
+    val searchMoviesList = MutableLiveData<List<Movie>>()
 
     fun onCreate(){
         getMoviesLists()
@@ -52,6 +52,25 @@ class MainViewModel @Inject constructor(
                 }
             } catch (ex:Exception) {
                 Log.e(TAG, "Exception $ex")
+            }
+        }
+    }
+
+    fun getMoviesByName(query:String?){
+        viewModelScope.launch {
+            try {
+                Log.i(TAG, "METHOD CALLED: getMoviesByName()")
+                if(!query.isNullOrEmpty()) {
+                    val result: List<Movie> = getMoviesByNameUseCase(query.lowercase())
+                    if(!result.isNullOrEmpty())
+                        searchMoviesList.value = result
+                    else
+                        searchMoviesList.value = emptyList()
+                } else
+                    searchMoviesList.value = emptyList()
+
+            } catch (ex:Exception) {
+                Log.e(TAG, "Excepton: $ex")
             }
         }
     }
